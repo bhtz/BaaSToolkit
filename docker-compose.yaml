@@ -1,0 +1,103 @@
+version: '3'
+services:
+
+  postgres:
+    image: postgis/postgis:13-master
+    container_name: database
+    ports:
+      - "5432:5432"
+    restart: always
+    networks:
+      - baas
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: postgres
+
+  cache:
+    container_name: cache
+    image: redis:6
+    networks:
+      - baas
+
+  directus:
+    container_name: directus
+    image: directus/directus:latest
+    ports:
+      - 8055:8055
+    volumes:
+      # By default, uploads are stored in /directus/uploads
+      # Always make sure your volumes matches the storage root when using
+      # local driver
+      - ./src/services/directus/uploads:/directus/uploads
+      # Make sure to also mount the volume when using SQLite
+      # - ./database:/directus/database
+      # If you want to load extensions from the host
+      - ./src/services/directus/extensions:/directus/extensions
+    networks:
+      - baas
+    depends_on:
+      - cache
+      - postgres
+    environment:
+      KEY: '255d861b-5ea1-5996-9aa3-922530ec40b1'
+      SECRET: '6116487b-cda1-52c2-b5b5-c8022c45e263'
+
+      DB_CLIENT: 'pg'
+      DB_HOST: 'postgres'
+      DB_PORT: '5432'
+      DB_DATABASE: 'directus'
+      DB_USER: 'postgres'
+      DB_PASSWORD: 'root'
+
+      CACHE_ENABLED: 'true'
+      CACHE_STORE: 'redis'
+      CACHE_REDIS: 'redis://cache:6379'
+
+      ADMIN_EMAIL: 'admin@baas.com'
+      ADMIN_PASSWORD: 'baas'
+
+      # Make sure to set this in production
+      # (see https://docs.directus.io/configuration/config-options/#general)
+      # PUBLIC_URL: 'https://directus.example.com'
+
+  hasura:
+    image: hasura/graphql-engine:v2.7.0
+    container_name: hasura
+    ports:
+    - "8056:8000"
+    depends_on:
+    - "postgres"
+    networks:
+      - baas
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:root@postgres:5432/hasura
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_ADMIN_SECRET: 'baas'
+      HASURA_GRAPHQL_SERVER_PORT: 8000
+      HASURA_GRAPHQL_ENABLE_REMOTE_SCHEMA_PERMISSIONS: "true"
+
+  parse:
+    build: ./src/services/parse
+    container_name: parse
+    ports:
+    - "8057:1337"
+    depends_on:
+    - "postgres"
+    networks:
+      - baas
+    restart: always
+      # - ./src/services/parse/logs:/parse/logs
+      # - ./src/services/parse/extensions:/parse/extensions
+    environment:
+      TEST: postgres://postgres:root@postgres:5432/hasura
+
+volumes:
+  db_data:
+
+networks:
+  baas:

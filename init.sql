@@ -1,0 +1,3 @@
+CREATE DATABASE directus;
+CREATE DATABASE hasura;
+CREATE DATABASE parse;

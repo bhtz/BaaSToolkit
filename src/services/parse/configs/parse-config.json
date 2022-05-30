@@ -1,0 +1,35 @@
+{
+    "port" : 1337,
+    "api": {
+        "databaseURI": "postgres://postgres:root@host.docker.internal:5432/parse",
+        "appId": "APPLICATION_ID",
+        "masterKey": "MASTER_KEY",
+        "cloud": "./extensions/main.js",
+        "serverURL": "http://localhost:1337/parse",
+        "publicServerURL": "http://localhost:1337/parse"
+    },
+
+    "graphql": {
+        "graphQLPath": "/graphql",
+        "playgroundPath": "/playground"
+    },
+
+    "dashboard": {
+        "apps": [
+            {
+                "serverURL": "http://localhost:8057/parse",
+                "graphQLServerURL": "http://localhost:8057/graphql",
+                "appId": "APPLICATION_ID",
+                "masterKey": "MASTER_KEY",
+                "appName": "Baas Toolkit"
+            }
+        ],
+        "users": [
+            {
+              "user":"admin",
+              "pass":"baas",
+              "apps": [{"appId": "APPLICATION_ID"}]
+            }
+        ]
+    }
+}
