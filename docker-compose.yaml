@@ -96,6 +96,16 @@ services:
     environment:
       TEST: postgres://postgres:root@postgres:5432/hasura
 
+  pocketbase:
+    # image: ghcr.io/muchobien/pocketbase:latest
+    build: ./src/services/pocketbase
+    container_name: pocketbase
+    restart: unless-stopped
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./src/services/pocketbase/data:/pb_data
+
 volumes:
   db_data:
 
