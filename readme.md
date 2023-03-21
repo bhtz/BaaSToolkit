@@ -20,8 +20,10 @@ Clone the repository then run the following command :
         docker-compose up
 
 * [Directus app](http://localhost:8055)
-* [Hasura console](http://localhost:8056)
-* [Parse dashboard](http://localhost:8057)
+* [Hasura console](http://localhost:8056/console)
+* [Parse dashboard](http://localhost:8057/dashboard)
+* [Pocketbase](http://localhost:8090/_/?installer#)
+* [Strapi](http://localhost:8091/)
 
 Requirements : 
 --------------
