@@ -1,5 +1,9 @@
+import colors from "tailwindcss/colors";
+import preset from "./tailwind.preset.json";
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+    presets:[preset],
     content: [
         "./components/**/*.{js,vue,ts}",
         "./layouts/**/*.vue",
@@ -8,44 +12,14 @@ module.exports = {
         "./nuxt.config.{js,ts}",
         "./app.vue",
     ],
-  theme: {
-    extend: {},
-      fontFamily: {
-          'body': [
-              'Inter',
-              'ui-sans-serif',
-              'system-ui',
-              '-apple-system',
-              'system-ui',
-              'Segoe UI',
-              'Roboto',
-              'Helvetica Neue',
-              'Arial',
-              'Noto Sans',
-              'sans-serif',
-              'Apple Color Emoji',
-              'Segoe UI Emoji',
-              'Segoe UI Symbol',
-              'Noto Color Emoji'
-          ],
-          'sans': [
-              'Inter',
-              'ui-sans-serif',
-              'system-ui',
-              '-apple-system',
-              'system-ui',
-              'Segoe UI',
-              'Roboto',
-              'Helvetica Neue',
-              'Arial',
-              'Noto Sans',
-              'sans-serif',
-              'Apple Color Emoji',
-              'Segoe UI Emoji',
-              'Segoe UI Symbol',
-              'Noto Color Emoji'
-          ]
-      }
-  },
-  plugins: [],
+    theme: {
+        extend: {
+            colors: {
+                ...colors,
+            },
+        },
+    },
+    plugins: [
+        require('@tailwindcss/forms')
+    ],
 }
