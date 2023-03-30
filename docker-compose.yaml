@@ -126,18 +126,6 @@ services:
     volumes:
       - ./src/services/pocketbase/data:/pb_data
 
-  nuxt:
-    build:
-      context: .
-    image: nuxt_dev
-    container_name: nuxt_dev
-    command: npm run dev
-    volumes:
-      - .:/app
-      - /app/node_modules
-    ports:
-      - "3000:3000"
-
 volumes:
   db_data:
 
