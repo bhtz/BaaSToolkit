@@ -6,14 +6,7 @@
           <div class="lg:max-w-lg">
             <h2 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{{panel.name}}</h2>
             <dl class="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
-              <div v-for="feature in panel.features" :key="feature.name" class="relative pl-9">
-                <dt class="inline font-semibold text-gray-900">
-                  <component :is="feature.icon" class="absolute left-1 top-1 h-5 w-5 text-indigo-600" aria-hidden="true" />
-                  {{ feature.name }}
-                </dt>
-                {{ ' ' }}
-                <dd class="inline">{{ feature.description }}</dd>
-              </div>
+              <Features :panelId="panel.id"/>
             </dl>
           </div>
         </div>
@@ -26,9 +19,15 @@
 </template>
 
 <script setup>
-  import { CloudArrowUpIcon, LockClosedIcon, ServerIcon } from '@heroicons/vue/20/solid'
+  import Features from "~/components/Features.vue";
 
-  const panels = [{
+  const {getItems} = useDirectusItems();
+
+  const panels = await getItems({
+    collection: 'panels'
+  });
+
+  /*const panels = [{
     name:"Black Crystal 375Wp G3",
     features : [
       {
@@ -59,9 +58,7 @@
         {
           name: 'Tecnología de celdas Tipo-N',
           description:
-              '108 medias celdas 182 X 91 mm /' +
-              'Células más potentes /' +
-              'Mejor rendimiento de la superficie',
+              '108 medias celdas 182 X 91 mm / Células más potentes / Mejor rendimiento de la superficie',
           icon: CloudArrowUpIcon,
         },
         {
@@ -79,7 +76,7 @@
           icon: ServerIcon,
         }
       ],
-    }]
+    }]*/
 </script>
 
 <style scoped lang="scss">

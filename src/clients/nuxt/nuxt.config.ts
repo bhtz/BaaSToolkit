@@ -7,4 +7,8 @@ export default defineNuxtConfig({
             autoprefixer: {},
         },
     },
+    modules: ["nuxt-directus"],
+    directus: {
+        url: 'http://localhost:8055/',
+    }
 })
